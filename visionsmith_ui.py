@@ -169,19 +169,19 @@ threading.Thread(target=setup_tray, daemon=True).start()
 # Main window
 root = tk.Tk()
 root.title("VisionSmith - Prompt Forge UI")
-root.geometry("800x750")
+root.geometry("")
 root.configure(padx=20, pady=20)
 
 # Vision Input
-tk.Label(root, text="🧠 What do you want to create? (Vision Input)", font=("Arial", 12, "bold")).pack(anchor="w")
+tk.Label(root, text="What do you want to create? (Vision Input)", font=("Arial", 12, "bold")).pack(anchor="w")
 vision_input = tk.Text(root, height=5, wrap=tk.WORD)
 vision_input.pack(fill=tk.X, pady=(0, 10))
 
 # Output Style
-tk.Label(root, text="🎨 Select Output Style", font=("Arial", 12)).pack(anchor="w")
+tk.Label(root, text="Select Output Style", font=("Arial", 12, "bold")).pack(anchor="w")
 style_var = tk.StringVar()
 style_dropdown = ttk.Combobox(root, textvariable=style_var, values=[
-    "Code", "Blog Post", "Vlog Script", "Agent", "Story", "Song", "Business Plan", "Lesson Plan"
+    "Code", "Blog Post", "Vlog Script", "Agent", "Story", "Song", "Business Plan", "Lesson Plan", "Word Doc", "Excel", "Email", "Sharepoint Page", "Sharepoint Site"
 ], state="readonly")
 style_dropdown.pack(fill=tk.X, pady=(0, 10))
 style_dropdown.bind("<<ComboboxSelected>>", toggle_lang_selector)
@@ -190,7 +190,7 @@ style_dropdown.bind("<<ComboboxSelected>>", toggle_lang_selector)
 code_lang_var = tk.StringVar()
 code_lang_frame = tk.Frame(root) # Create the frame
 
-code_lang_label = tk.Label(code_lang_frame, text="💻 Preferred Programming Language")
+code_lang_label = tk.Label(code_lang_frame, text="Preferred Programming Language", font=("Arial", 8, "bold"))
 code_lang_dropdown = ttk.Combobox(code_lang_frame, textvariable=code_lang_var, values=[
     "Python", "JavaScript", "HTML/CSS", "C#", "TypeScript", "React", "Node.js", "PHP", "Go"
 ], state="readonly")
@@ -225,7 +225,7 @@ avoid_input = tk.Text(root, height=3)
 avoid_input.pack(fill=tk.X, pady=(0, 15))
 
 # Final Prompt Output
-tk.Label(root, text="📝 Final Prompt", font=("Arial", 12, "bold")).pack(anchor="w")
+tk.Label(root, text="Final Prompt", font=("Arial", 12, "bold")).pack(anchor="w")
 final_prompt_output = tk.Text(root, height=10, wrap=tk.WORD)
 final_prompt_output.pack(fill=tk.BOTH, expand=True)
 
@@ -233,7 +233,7 @@ final_prompt_output.pack(fill=tk.BOTH, expand=True)
 btn_frame = tk.Frame(root)
 btn_frame.pack(fill=tk.X, pady=10)
 
-save_btn = tk.Button(btn_frame, text="💾 Save Prompt", command=save_prompt)
+save_btn = tk.Button(btn_frame, text="Save Prompt", command=save_prompt)
 save_btn.pack(side=tk.LEFT, padx=5)
 
 injection_var = tk.StringVar(value="ChatGPT")
@@ -242,7 +242,7 @@ injection_dropdown = ttk.Combobox(btn_frame, textvariable=injection_var, values=
 ], state="readonly")
 injection_dropdown.pack(side=tk.LEFT, padx=5)
 
-inject_btn = tk.Button(btn_frame, text="🚀 Inject Prompt", command=inject_prompt)
+inject_btn = tk.Button(btn_frame, text="Inject Prompt", command=inject_prompt)
 inject_btn.pack(side=tk.LEFT, padx=5)
 
 hide_window() 
