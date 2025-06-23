@@ -3,13 +3,14 @@ from tkinter import ttk, filedialog, messagebox, simpledialog
 import webbrowser
 import pyautogui
 import time
+import pyperclip
 
 # Web URLs for each AI tool
 ai_urls = {
     "ChatGPT": "https://chat.openai.com",
     "Claude": "https://claude.ai",
     "CoPilot": "https://copilot.microsoft.com",
-    "Grok": "https://x.ai",
+    "Grok": "https://grok.com",
     "Custom": ""  # Will be asked
 }
 
@@ -28,8 +29,14 @@ def open_or_focus_web_ai(tool, prompt_text):
 
 def inject_to_browser(prompt_text):
     time.sleep(0.5)
-    pyautogui.write(prompt_text, interval=0.01)
-    pyautogui.press("enter")
+    try:
+        pyperclip.copy(prompt_text)
+        pyautogui.hotkey("ctrl", "v")
+        pyautogui.press("enter")
+    except Exception as e:
+        print("Clipboard injection failed:", e)
+        messagebox.showerror("Injection Error", f"Failed to paste into browser.\n{e}")
+
 
 
 # Generate final prompt
