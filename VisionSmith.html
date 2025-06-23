@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VisionSmith (Lite)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    textarea, input, select, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1em;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #388E3C;
+    }
+    .label {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🧠 VisionSmith Prompt Builder</h1>
+
+  <label class="label">What do you want to create?</label>
+  <textarea id="vision" rows="3" placeholder="e.g., A script to analyze sentiment in tweets"></textarea>
+
+  <label class="label">Select Output Style</label>
+  <select id="style">
+    <option value="">-- Choose --</option>
+    <option>Code</option>
+    <option>Blog Post</option>
+    <option>Vlog Script</option>
+    <option>Agent</option>
+    <option>Story</option>
+    <option>Song</option>
+    <option>Business Plan</option>
+    <option>Lesson Plan</option>
+  </select>
+
+  <label class="label">Tone / Personality</label>
+  <input type="text" id="tone" placeholder="e.g., playful, serious, technical" />
+
+  <label class="label">Key Features / Must-Haves</label>
+  <textarea id="features" rows="2"></textarea>
+
+  <label class="label">Constraints / Rules</label>
+  <textarea id="constraints" rows="2"></textarea>
+
+  <label class="label">Avoid / Exclusions</label>
+  <textarea id="avoid" rows="2"></textarea>
+
+  <button onclick="generatePrompt()">Generate Prompt</button>
+
+  <label class="label">📝 Final Prompt</label>
+  <textarea id="output" rows="10" readonly></textarea>
+  <button onclick="copyPrompt()">📋 Copy to Clipboard</button>
+
+  <script>
+    function generatePrompt() {
+      const vision = document.getElementById("vision").value.trim();
+      const style = document.getElementById("style").value;
+      const tone = document.getElementById("tone").value.trim();
+      const features = document.getElementById("features").value.trim();
+      const constraints = document.getElementById("constraints").value.trim();
+      const avoid = document.getElementById("avoid").value.trim();
+
+      if (!vision || !style) {
+        alert("Please provide both a vision and a style.");
+        return;
+      }
+
+      const langLine = style === "Code" ? "Preferred language: (specify language)" : "";
+      const prompt = `You are to generate a ${style.toLowerCase()} based on the following vision:
+
+"${vision}"
+
+${langLine}
+Desired tone: ${tone || "default/neutral"}
+Key features to include: ${features || "N/A"}
+Constraints: ${constraints || "None"}
+Avoid: ${avoid || "Nothing"}
+
+Respond in the style of a polished ${style.toLowerCase()}, formatted and structured as if ready for immediate use.`;
+
+      document.getElementById("output").value = prompt;
+    }
+
+    function copyPrompt() {
+      const output = document.getElementById("output");
+      output.select();
+      document.execCommand("copy");
+      alert("Prompt copied to clipboard.");
+    }
+  </script>
+
+</body>
+</html>

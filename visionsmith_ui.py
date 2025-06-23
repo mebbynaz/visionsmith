@@ -39,8 +39,16 @@ def inject_to_browser(prompt_text):
     except Exception as e:
         print("Clipboard injection failed:", e)
         messagebox.showerror("Injection Error", f"Failed to paste into browser.\n{e}")
-
-
+        
+def clear_inputs():
+    vision_input.delete("1.0", tk.END)
+    style_var.set("")
+    tone_input.delete(0, tk.END)
+    features_input.delete("1.0", tk.END)
+    constraints_input.delete("1.0", tk.END)
+    avoid_input.delete("1.0", tk.END)
+    code_lang_var.set("")
+    final_prompt_output.delete("1.0", tk.END)
 
 # Generate final prompt
 def generate_prompt():
@@ -178,8 +186,7 @@ style_dropdown = ttk.Combobox(root, textvariable=style_var, values=[
 style_dropdown.pack(fill=tk.X, pady=(0, 10))
 style_dropdown.bind("<<ComboboxSelected>>", toggle_lang_selector)
 
-# Code language selector frame - define it here, but don't pack it initially.
-# It will be packed by toggle_lang_selector when "Code" is selected.
+# Code language selector 
 code_lang_var = tk.StringVar()
 code_lang_frame = tk.Frame(root) # Create the frame
 
@@ -191,9 +198,14 @@ code_lang_dropdown = ttk.Combobox(code_lang_frame, textvariable=code_lang_var, v
 code_lang_label.pack(anchor="w")
 code_lang_dropdown.pack(fill=tk.X)
 
-# Submit Button - this needs to be defined BEFORE the call to pack() that uses it as 'before'
+# Submit Button 
 submit_btn = tk.Button(root, text="Generate Prompt", command=generate_prompt, bg="#4CAF50", fg="white")
 submit_btn.pack(pady=(0, 20), ipadx=10)
+
+# Clear Button
+clear_btn = tk.Button(root, text="Clear All", command=clear_inputs, bg="#f44336", fg="white")
+clear_btn.pack(pady=(0, 20), ipadx=10)
+
 
 # Additional Fields
 tk.Label(root, text="Tone / Personality (e.g., funny, serious, dark, hopeful)").pack(anchor="w")
