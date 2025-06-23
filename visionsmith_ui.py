@@ -4,6 +4,9 @@ import webbrowser
 import pyautogui
 import time
 import pyperclip
+from pystray import Icon, MenuItem as item, Menu
+from PIL import Image, ImageDraw
+import threading
 
 # Web URLs for each AI tool
 ai_urls = {
@@ -100,6 +103,60 @@ def toggle_lang_selector(event):
         code_lang_frame.pack(fill=tk.X, pady=(0, 10), before=submit_btn)
     else:
         code_lang_frame.pack_forget()
+        
+# System Tray Support Section
+from PIL import Image, ImageDraw
+
+def create_icon():
+    # 64x64 transparent canvas
+    image = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
+
+    # Bulb base
+    draw.ellipse((16, 16, 48, 48), fill="gold", outline="black", width=2)
+    draw.line((32, 48, 32, 60), fill="black", width=4)  # filament line
+    draw.rectangle((28, 60, 36, 64), fill="gray")       # screw base
+
+    # Radiating light lines
+    rays = [
+        ((32, 4), (32, 14)),
+        ((50, 10), (44, 20)),
+        ((60, 32), (50, 32)),
+        ((50, 50), (44, 44)),
+        ((32, 60), (32, 54)),
+        ((14, 50), (20, 44)),
+        ((4, 32), (14, 32)),
+        ((14, 14), (20, 20)),
+    ]
+    for start, end in rays:
+        draw.line([start, end], fill="orange", width=2)
+
+    return image
+
+
+
+def show_window(icon, item):
+    root.deiconify()
+
+def hide_window():
+    root.withdraw()
+
+def quit_app(icon, item):
+    icon.stop()
+    root.destroy()
+
+def setup_tray():
+    menu = Menu(
+        item('Show', show_window),
+        item('Hide', lambda icon, item: hide_window()),
+        item('Exit', quit_app)
+    )
+    icon = Icon("VisionSmith", create_icon(), menu=menu)
+    icon.run()
+
+# Start tray in a new thread
+threading.Thread(target=setup_tray, daemon=True).start()
+
 
 # Main window
 root = tk.Tk()
@@ -176,5 +233,5 @@ injection_dropdown.pack(side=tk.LEFT, padx=5)
 inject_btn = tk.Button(btn_frame, text="🚀 Inject Prompt", command=inject_prompt)
 inject_btn.pack(side=tk.LEFT, padx=5)
 
-# Run the app
+hide_window() 
 root.mainloop()
