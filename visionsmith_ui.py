@@ -1,5 +1,36 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog, messagebox, simpledialog
+import webbrowser
+import pyautogui
+import time
+
+# Web URLs for each AI tool
+ai_urls = {
+    "ChatGPT": "https://chat.openai.com",
+    "Claude": "https://claude.ai",
+    "CoPilot": "https://copilot.microsoft.com",
+    "Grok": "https://x.ai",
+    "Custom": ""  # Will be asked
+}
+
+def open_or_focus_web_ai(tool, prompt_text):
+    url = ai_urls.get(tool, "")
+    if tool == "Custom" or not url:
+        url = simpledialog.askstring("Custom AI URL", "Enter the URL of the AI interface:")
+        if not url:
+            return
+
+    # Open the browser to the AI tool
+    webbrowser.open_new_tab(url)
+
+    # Wait and inject after a delay
+    root.after(5000, lambda: inject_to_browser(prompt_text))  # Wait 5s for browser to load
+
+def inject_to_browser(prompt_text):
+    time.sleep(0.5)
+    pyautogui.write(prompt_text, interval=0.01)
+    pyautogui.press("enter")
+
 
 # Generate final prompt
 def generate_prompt():
@@ -51,7 +82,8 @@ def inject_prompt():
     if not prompt:
         messagebox.showwarning("No prompt", "Generate a prompt first.")
         return
-    messagebox.showinfo("Inject", f"(Pretending to inject into {tool}...)")
+    open_or_focus_web_ai(tool, prompt)
+
 
 # Handle style dropdown selection
 def toggle_lang_selector(event):
